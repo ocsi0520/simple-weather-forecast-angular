@@ -12,6 +12,8 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
+import { AuthorizeService } from 'src/api-authorization/authorize.service';
+import { FakeAuthorizeService } from 'src/api-authorization/fake-authorize.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
     ])
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
+    { provide: AuthorizeService, useClass: FakeAuthorizeService }
   ],
   bootstrap: [AppComponent]
 })
