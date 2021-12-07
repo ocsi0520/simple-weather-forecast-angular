@@ -1,8 +1,8 @@
-import { ListViewQueryDescriptor } from '../descriptors/list-view-query-descriptor';
+import { ListViewDescriptor } from '../descriptors/list-view-descriptor';
 import { WeatherForecast } from '../weather-forecast';
 
 
 export type WeatherResponse = {
-  listViewDescriptor: ListViewQueryDescriptor & { pagination: { availablePages: number; }; };
+  listViewDescriptor: ListViewDescriptor;
   weatherData: Array<WeatherForecast>;
 };

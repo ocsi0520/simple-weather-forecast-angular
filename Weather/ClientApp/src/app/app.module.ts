@@ -15,6 +15,9 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { AuthorizeService } from 'src/api-authorization/authorize.service';
 import { FakeAuthorizeService } from 'src/api-authorization/fake-authorize.service';
 import { WeatherListViewPresenter } from './list/presenter/list-view-presenter.component';
+import { Paginator } from './paginator/paginator.component';
+
+// TODO: put WeatherList into its own module
 
 @NgModule({
   declarations: [
@@ -23,7 +26,8 @@ import { WeatherListViewPresenter } from './list/presenter/list-view-presenter.c
     HomeComponent,
     CounterComponent,
     WeatherList,
-    WeatherListViewPresenter
+    WeatherListViewPresenter,
+    Paginator
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

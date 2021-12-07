@@ -1,6 +1,5 @@
+import { Pagination } from 'src/app/paginator/pagination.model';
+
 export type ListViewQueryDescriptor = {
-  pagination: {
-    size: number;
-    currentIndex: number;
-  } | null;
+  pagination: Omit<Pagination, 'availablePages'> | null;
 }
