@@ -14,6 +14,7 @@ import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { AuthorizeService } from 'src/api-authorization/authorize.service';
 import { FakeAuthorizeService } from 'src/api-authorization/fake-authorize.service';
+import { WeatherListViewPresenter } from './list/presenter/list-view-presenter.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { FakeAuthorizeService } from 'src/api-authorization/fake-authorize.servi
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    WeatherList
+    WeatherList,
+    WeatherListViewPresenter
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
