@@ -41,6 +41,27 @@ export class WeatherList implements OnInit {
   private handleError(_error: Error): void {
     this.isLoading = false;
   }
+
+  public changePageSize(pageSize: number): void {
+    this.listViewQueryDescriptor = {
+      ...this.listViewQueryDescriptor,
+      pagination: {
+        currentIndex: 0,
+        size: pageSize
+      }
+    };
+    this.queryWeatherData();
+  }
+  public goToPage(pageIndex: number): void {
+    this.listViewQueryDescriptor = {
+      ...this.listViewQueryDescriptor,
+      pagination: {
+        ...this.listViewQueryDescriptor.pagination,
+        currentIndex: pageIndex
+      }
+    };
+    this.queryWeatherData();
+  }
 }
 
 

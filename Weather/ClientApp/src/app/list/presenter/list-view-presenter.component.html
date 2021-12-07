@@ -1,5 +1,8 @@
 <app-paginator *ngIf="listView.listViewDescriptor.pagination"
-  [pagination]="listView.listViewDescriptor.pagination">
+  [pagination]="listView.listViewDescriptor.pagination"
+  (changePageSize)="changePageSizeEmitter.emit($event)"
+  (goToPage)="goToPageEmitter.emit($event)"
+  >
 </app-paginator>
 
 <table class='table table-striped' aria-labelledby="tableLabel">

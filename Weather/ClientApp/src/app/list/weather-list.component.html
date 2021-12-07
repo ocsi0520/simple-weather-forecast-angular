@@ -4,5 +4,8 @@
 
 <p *ngIf="isLoading"><em>Loading...</em></p>
 
-<app-weather-list-view-presenter *ngIf="listView" [listView]="listView">
+<app-weather-list-view-presenter *ngIf="listView" [listView]="listView"
+  (changePageSize)="changePageSize($event)"
+  (goToPage)="goToPage($event)"
+>
 </app-weather-list-view-presenter>
