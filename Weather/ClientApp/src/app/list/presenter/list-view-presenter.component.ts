@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { WeatherForecast } from '../weather-forecast';
+import { WeatherResponse } from '../service/weather-response';
 
 @Component({
   selector: 'app-weather-list-view-presenter',
   templateUrl: './list-view-presenter.component.html',
 })
 export class WeatherListViewPresenter {
-  @Input('forecasts') public forecasts: Array<WeatherForecast>;
+  @Input('listView') public listView: WeatherResponse;
 }

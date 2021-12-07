@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
-import { WeatherForecast } from '../weather-forecast';
+import { ListViewQueryDescriptor } from '../descriptors/list-view-query-descriptor';
+import { WeatherResponse } from './weather-response';
 
 export interface WeatherService {
-  getWeatherListView(): Observable<Array<WeatherForecast>>;
+  getWeatherListView(listViewDescriptor?: ListViewQueryDescriptor): Observable<WeatherResponse>;
 }

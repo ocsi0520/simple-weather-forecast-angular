@@ -2,6 +2,7 @@
 
 <p>This component demonstrates fetching data from the server.</p>
 
-<p *ngIf="!forecasts"><em>Loading...</em></p>
+<p *ngIf="isLoading"><em>Loading...</em></p>
 
-<app-weather-list-view-presenter *ngIf="forecasts" [forecasts]="forecasts"></app-weather-list-view-presenter>
+<app-weather-list-view-presenter *ngIf="listView" [listView]="listView">
+</app-weather-list-view-presenter>
