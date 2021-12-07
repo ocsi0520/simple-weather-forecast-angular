@@ -1,14 +1,16 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, ErrorHandler, Inject, OnInit } from '@angular/core';
 import { HttpWeatherService } from './service/http-weather-service';
 import { WeatherService } from './service/weather-service';
 import { ListViewQueryDescriptor } from './descriptors/list-view-query-descriptor';
 import { WeatherResponse } from './service/weather-response';
 import { WeatherResponseMapper } from './service/response-mapper/response-mapper';
+import { WeatherErrorHandler } from './error-handler/error-handler.service';
 
 @Component({
   selector: 'app-weather-list',
   templateUrl: './weather-list.component.html',
   providers: [
+    WeatherErrorHandler,
     WeatherResponseMapper,
     { provide: 'WeatherService', useClass: HttpWeatherService }
   ]
@@ -23,7 +25,10 @@ export class WeatherList implements OnInit {
   };
   private listView: WeatherResponse | null = null;
 
-  constructor (@Inject('WeatherService') private weatherService: WeatherService) { }
+  constructor (
+    @Inject('WeatherService') private weatherService: WeatherService,
+    private errorHandler: WeatherErrorHandler
+  ) { }
 
   public ngOnInit(): void {
     this.queryWeatherData();
@@ -36,9 +41,8 @@ export class WeatherList implements OnInit {
       this.isLoading = false;
     }, error => this.handleError(error));
   }
-
-  // TODO: handle error
-  private handleError(_error: Error): void {
+  private handleError(error: Error): void {
+    this.errorHandler.handleError(error);
     this.isLoading = false;
   }
 
