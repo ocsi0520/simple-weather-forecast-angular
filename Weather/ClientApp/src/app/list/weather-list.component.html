@@ -1,0 +1,15 @@
+<h1 id="tableLabel">Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+<app-file-uploader (fileUploaded)="queryWeatherData()"></app-file-uploader>
+
+<input #search>
+
+<p *ngIf="isLoading"><em>Loading...</em></p>
+
+<app-weather-list-view-presenter *ngIf="listView && !isLoading" [listView]="listView"
+  (changePageSize)="changePageSize($event)"
+  (goToPage)="goToPage($event)"
+>
+</app-weather-list-view-presenter>

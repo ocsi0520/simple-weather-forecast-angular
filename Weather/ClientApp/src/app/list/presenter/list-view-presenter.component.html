@@ -1,0 +1,25 @@
+<app-paginator *ngIf="listView.listViewDescriptor.pagination"
+  [pagination]="listView.listViewDescriptor.pagination"
+  (changePageSize)="changePageSizeEmitter.emit($event)"
+  (goToPage)="goToPageEmitter.emit($event)"
+  >
+</app-paginator>
+
+<table class='table table-striped' aria-labelledby="tableLabel">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Temp. (C)</th>
+      <th>Temp. (F)</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let forecast of listView.weatherData">
+      <td>{{ forecast.date }}</td>
+      <td>{{ forecast.temperatureC }}</td>
+      <td>{{ forecast.temperatureF }}</td>
+      <td>{{ forecast.summary }}</td>
+    </tr>
+  </tbody>
+</table>

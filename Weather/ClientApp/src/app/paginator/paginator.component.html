@@ -1,0 +1,21 @@
+<div class="paginator">
+  <button (click)="goToPage(pagination.currentIndex - 1)" [disabled]="pagination.currentIndex === 0">
+    &lArr;
+  </button>
+
+  <span>{{ pagination.currentIndex + 1 }} / {{ pagination.availablePages }} </span>
+
+  <button (click)="goToPage(pagination.currentIndex + 1)"
+    [disabled]="pagination.currentIndex >= pagination.availablePages - 1">
+    &rArr;
+  </button>
+
+  <select (change)="changePageSize($event.target.value)">
+    <option *ngFor="let availablePageSize of availablePageSizes"
+      [value]="availablePageSize"
+      [selected]="availablePageSize === pagination.size"
+    >
+      {{ availablePageSize }}
+    </option>
+  </select>
+</div>
