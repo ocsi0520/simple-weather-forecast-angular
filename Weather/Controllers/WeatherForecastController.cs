@@ -40,21 +40,28 @@ namespace Weather.Controllers
       .ToArray();
     }
 
-
-    [HttpPost]
-    [Consumes("multipart/form-data")]
-    public Microsoft.AspNetCore.Mvc.ObjectResult Post([FromForm] WeatherData weatherData)
+    private void validateWeatherData(WeatherData weatherData)
     {
       bool isInvalidWeatherData =
         weatherData == null ||
           weatherData.file == null ||
           !(weatherData.file is IFormFile) ||
           weatherData.file.ContentType != "text/csv";
-
       if (isInvalidWeatherData)
-        return Problem("File must have 'text/csv' content-type", null, 415, null, null);
-      else
+        throw new InvalidDataException("File must have 'text/csv' content-type");
+    }
+
+
+    [HttpPost]
+    [Consumes("multipart/form-data")]
+    public Microsoft.AspNetCore.Mvc.ObjectResult Post([FromForm] WeatherData weatherData)
+    {
+      try {
+        this.validateWeatherData(weatherData);
         return Ok(this.ReadAsList(weatherData.file));
+      } catch (InvalidDataException e) {
+        return Problem(e.Message, null, 415, null, null);
+      }
     }
     private string ReadAsList(IFormFile file)
     {
