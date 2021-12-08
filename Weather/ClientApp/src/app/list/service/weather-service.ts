@@ -4,4 +4,5 @@ import { WeatherResponse } from './weather-response';
 
 export interface WeatherService {
   getWeatherListView(listViewDescriptor?: ListViewQueryDescriptor): Observable<WeatherResponse>;
+  uploadWeatherList(file: File): Observable<void>
 }

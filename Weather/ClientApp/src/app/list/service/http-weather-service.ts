@@ -16,9 +16,24 @@ export class HttpWeatherService implements WeatherService {
     @Inject('BASE_URL') private baseUrl: string,
     private responseMapper: WeatherResponseMapper
   ) { }
+  public uploadWeatherList(file: File): Observable<void> {
+    const formData = new FormData();
+    formData.append('file', file);
+  
+    // angular does not provide proper overlod for post method
+    // that's why we need responseType 'text', otherwise it will
+    // automatically try to parse a json, which results in error
+    return this.http.post<void>(this.getWeatherApiUrl(), formData, {
+      responseType: 'text' as any
+    });
+  }
   public getWeatherListView(listViewDescriptor?: ListViewQueryDescriptor): Observable<WeatherResponse> {
-    return this.http.get<WeatherForecast[]>(this.baseUrl + 'weatherforecast').pipe(
+    return this.http.get<WeatherForecast[]>(this.getWeatherApiUrl()).pipe(
       map((weatherForecasts) => this.responseMapper.mapRawResponse(listViewDescriptor, weatherForecasts))
     );
+  }
+
+  private getWeatherApiUrl(): string {
+    return this.baseUrl + 'weatherforecast';
   }
 }
