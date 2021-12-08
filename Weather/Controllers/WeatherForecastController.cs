@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Weather.Models;
 
 namespace Weather.Controllers
@@ -15,6 +14,8 @@ namespace Weather.Controllers
   [Route("[controller]")]
   public class WeatherForecastController : ControllerBase
   {
+    private static IEnumerable<WeatherForecast> weatherForecasts = new WeatherForecast[0];
+    private WeatherCsvParser csvParser = new WeatherCsvParser();
     private static readonly string[] Summaries = new[]
     {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -30,6 +31,9 @@ namespace Weather.Controllers
     [HttpGet]
     public IEnumerable<WeatherForecast> Get()
     {
+      if(WeatherForecastController.weatherForecasts.Count() != 0)
+        return WeatherForecastController.weatherForecasts;
+
       var rng = new Random();
       return Enumerable.Range(1, 5).Select(index => new WeatherForecast
       {
@@ -54,24 +58,27 @@ namespace Weather.Controllers
 
     [HttpPost]
     [Consumes("multipart/form-data")]
-    public Microsoft.AspNetCore.Mvc.ObjectResult Post([FromForm] WeatherData weatherData)
+    public Microsoft.AspNetCore.Mvc.IActionResult Post([FromForm] WeatherData weatherData)
     {
-      try {
+      try
+      {
         this.validateWeatherData(weatherData);
-        return Ok(this.ReadAsList(weatherData.file));
-      } catch (InvalidDataException e) {
+        this.persistContent(weatherData.file);
+        return Ok(WeatherForecastController.weatherForecasts.Count());
+      }
+      catch (InvalidDataException e)
+      {
         return Problem(e.Message, null, 415, null, null);
       }
-    }
-    private string ReadAsList(IFormFile file)
-    {
-      var result = new StringBuilder();
-      using (var reader = new StreamReader(file.OpenReadStream()))
+      catch (FormatException e)
       {
-        while (reader.Peek() >= 0)
-          result.AppendLine(reader.ReadLine());
+        return Problem(e.Message, null, 422, null, null);
       }
-      return result.ToString();
+
+    }
+    private void persistContent(IFormFile file)
+    {
+      weatherForecasts = this.csvParser.parseWeatherCsv(file);
     }
   }
 }
