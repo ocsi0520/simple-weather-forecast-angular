@@ -2,11 +2,11 @@
 
 <p>This component demonstrates fetching data from the server.</p>
 
-<app-file-uploader></app-file-uploader>
+<app-file-uploader (fileUploaded)="queryWeatherData()"></app-file-uploader>
 
 <p *ngIf="isLoading"><em>Loading...</em></p>
 
-<app-weather-list-view-presenter *ngIf="listView" [listView]="listView"
+<app-weather-list-view-presenter *ngIf="listView && !isLoading" [listView]="listView"
   (changePageSize)="changePageSize($event)"
   (goToPage)="goToPage($event)"
 >

@@ -1,4 +1,4 @@
-import { Component, ErrorHandler, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { HttpWeatherService } from './service/http-weather-service';
 import { WeatherService } from './service/weather-service';
 import { ListViewQueryDescriptor } from './descriptors/list-view-query-descriptor';
@@ -34,7 +34,7 @@ export class WeatherList implements OnInit {
     this.queryWeatherData();
   }
 
-  private queryWeatherData(): void {
+  public queryWeatherData(): void {
     this.isLoading = true;
     this.weatherService.getWeatherListView(this.listViewQueryDescriptor).subscribe(result => {
       this.listView = result;

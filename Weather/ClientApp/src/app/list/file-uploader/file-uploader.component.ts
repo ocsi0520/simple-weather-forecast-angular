@@ -1,4 +1,5 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Output, EventEmitter } from '@angular/core';
+import { WeatherErrorHandler } from '../error-handler/error-handler.service';
 import { WeatherService } from '../service/weather-service';
 
 type UploadEvent = {
@@ -11,14 +12,19 @@ type UploadEvent = {
   styleUrls: ['./file-uploader.component.css']
 })
 export class FileUploaderComponent {
-
-  constructor(@Inject('WeatherService') private weatherService: WeatherService) {}
+  @Output('fileUploaded') fileUploadedEmitter: EventEmitter<void> = new EventEmitter();
+  constructor(
+    @Inject('WeatherService') private weatherService: WeatherService,
+    private weatherErrorHandler: WeatherErrorHandler
+  ) {}
 
   public uploadFile(event: UploadEvent): void {
     const file = event.target.files[0];
+    if (!file) return;
+
     this.weatherService.uploadWeatherList(file).subscribe(
-      (response) => console.info(response),
-      (error) => console.info('error', error)
+      () => this.fileUploadedEmitter.emit(),
+      (error) => this.weatherErrorHandler.handleError(error)
     );
   }
 }
