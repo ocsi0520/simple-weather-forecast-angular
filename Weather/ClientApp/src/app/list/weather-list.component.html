@@ -4,6 +4,8 @@
 
 <app-file-uploader (fileUploaded)="queryWeatherData()"></app-file-uploader>
 
+<input #search>
+
 <p *ngIf="isLoading"><em>Loading...</em></p>
 
 <app-weather-list-view-presenter *ngIf="listView && !isLoading" [listView]="listView"
