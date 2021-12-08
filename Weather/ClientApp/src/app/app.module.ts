@@ -16,6 +16,7 @@ import { AuthorizeService } from 'src/api-authorization/authorize.service';
 import { FakeAuthorizeService } from 'src/api-authorization/fake-authorize.service';
 import { WeatherListViewPresenter } from './list/presenter/list-view-presenter.component';
 import { Paginator } from './paginator/paginator.component';
+import { FileUploaderComponent } from './list/file-uploader/file-uploader.component';
 
 // TODO: put WeatherList into its own module
 
@@ -27,7 +28,8 @@ import { Paginator } from './paginator/paginator.component';
     CounterComponent,
     WeatherList,
     WeatherListViewPresenter,
-    Paginator
+    Paginator,
+    FileUploaderComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
