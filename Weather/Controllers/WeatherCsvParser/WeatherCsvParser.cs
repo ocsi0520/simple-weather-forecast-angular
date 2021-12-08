@@ -8,34 +8,44 @@ using System;
 
 class WeatherCsvParser
 {
-    public IEnumerable<WeatherForecast> parseWeatherCsv(IFormFile file)
-    {
-      var allStringRecords = this.readAllLines(file);
-      return allStringRecords.Select(stringRecord => this.mapStringRecordToModel(stringRecord));
-    }
+  public IEnumerable<WeatherForecast> parseWeatherCsv(IFormFile file)
+  {
+    var allStringRecords = this.readAllLines(file);
+    return allStringRecords.Select(stringRecord => this.mapStringRecordToModel(stringRecord));
+  }
 
-    private IEnumerable<string> readAllLines(IFormFile file)
+  private IEnumerable<string> readAllLines(IFormFile file)
+  {
+    var stringRecords = new List<string>();
+    using (var reader = new StreamReader(file.OpenReadStream()))
     {
-      var stringRecords = new List<string>();
-      using (var reader = new StreamReader(file.OpenReadStream()))
+      while (reader.Peek() >= 0)
       {
-        while (reader.Peek() >= 0)
-          stringRecords.Add(reader.ReadLine());
+        this.addNonEmptyLine(reader, stringRecords);
       }
-      return stringRecords;
     }
-    
-    private WeatherForecast mapStringRecordToModel(string stringRecord)
+    return stringRecords;
+  }
+
+  private void addNonEmptyLine(StreamReader reader, List<string> stringRecords)
+  {
+    var line = reader.ReadLine();
+    if (line.Length > 0)
+      stringRecords.Add(line);
+  }
+
+  private WeatherForecast mapStringRecordToModel(string stringRecord)
+  {
+    var parts = stringRecord.Split(',', System.StringSplitOptions.TrimEntries);
+    if (parts.Length != 3)
+      throw new FormatException("Wrongly formatted record: " + stringRecord);
+
+
+    return new WeatherForecast
     {
-        var parts = stringRecord.Split(',', System.StringSplitOptions.TrimEntries);
-        if (parts.Length != 3)
-          throw new FormatException("Wrongly formatted record: " + stringRecord);
-        
-        
-        return new WeatherForecast{
-          Date = Convert.ToDateTime(parts[0]),
-          TemperatureC = Convert.ToInt32(parts[1]),
-          Summary = parts[2]
-        };
-    }
+      Date = Convert.ToDateTime(parts[0]),
+      TemperatureC = Convert.ToInt32(parts[1]),
+      Summary = parts[2]
+    };
+  }
 }
