@@ -3,6 +3,7 @@ import { WeatherForecast } from '../../weather-forecast';
 import { RawResponse } from '../raw-response';
 import { WeatherResponse } from '../weather-response';
 
+// TODO: extract filter and paginator to separate class
 export class WeatherResponseMapper {
   public mapRawResponse(
     listViewDescriptor: ListViewQueryDescriptor | undefined,
@@ -30,16 +31,33 @@ export class WeatherResponseMapper {
       }
     };
   }
+  private filterRecordsBasedOnSearchParam(
+    listViewDescriptor: ListViewQueryDescriptor,
+    weatherForecasts: Array<WeatherForecast>
+  ): Array<WeatherForecast> {
+    if (!listViewDescriptor.searchParam) return weatherForecasts;
+
+    return weatherForecasts.filter(forecast => this.isForecastApplicableForFilter(listViewDescriptor, forecast));
+  }
+
+  private isForecastApplicableForFilter(
+    listViewDescriptor: ListViewQueryDescriptor,
+    { date, summary, temperatureC, temperatureF }: WeatherForecast): boolean {
+    return [ date, summary, temperatureC, temperatureF ]
+      .map(property => property.toString())
+      .some(stringProperty => stringProperty.includes(listViewDescriptor.searchParam!));
+  }
 
   private mapResponseWithCustomDescriptor(
     listViewDescriptor: ListViewQueryDescriptor,
     weatherForecasts: Array<WeatherForecast>
   ): WeatherResponse {
+    const filteredForecasts = this.filterRecordsBasedOnSearchParam(listViewDescriptor, weatherForecasts);
     const isPaginationSet = listViewDescriptor.pagination !== null;
     if (isPaginationSet)
-      return this.mapResponseWithPagination(listViewDescriptor, weatherForecasts);
+      return this.mapResponseWithPagination(listViewDescriptor, filteredForecasts);
     else
-      return this.mapResponseWithoutPagination(weatherForecasts);
+      return this.mapResponseWithoutPagination(filteredForecasts);
   }
   private mapResponseWithPagination(
     listViewDescriptor: ListViewQueryDescriptor,
